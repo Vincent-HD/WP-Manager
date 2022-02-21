@@ -1,0 +1,9 @@
+{
+    "require": {
+        "symfony/var-dumper": "^5.3",
+        "wp-cli/wp-cli-bundle": "^2.6",
+        "slim/slim": "^4.9",
+        "slim/psr7": "^1.5",
+        "symfony/cache": "^5.4"
+    }
+}
