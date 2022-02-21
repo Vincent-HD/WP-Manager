@@ -4,6 +4,7 @@ namespace WPM\Utils;
 
 use Exception;
 use Slim\Psr7\Response;
+use WPM_Error;
 
 class WPM_Utils {
 
@@ -29,6 +30,7 @@ class WPM_Utils {
 
     public static function runcommand($command) {
         if (!file_exists(ABSPATH . DIRECTORY_SEPARATOR . 'wp-cli.phar')) {
+            return new WPM_Error('missing_wpcli', 'Please download and install wp-cli.phar here: ' . ABSPATH);
         }
         $result = exec(self::START_CMD . " $command", $output, $result_code);
         if ($result_code > 0) {

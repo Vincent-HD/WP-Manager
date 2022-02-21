@@ -15,9 +15,12 @@ class WPM_Instance
     static public function parse_all_wp_instances($path)
     {
         if (!Utils::is_wp_package_installed("wp-cli/find-command")) {
-            Utils::runcommand("package install wp-cli/find-command");
+            $result = Utils::runcommand("package install wp-cli/find-command");
+            if (is_wpm_error($result)) return $result;
         }
-        $instances = json_decode(Utils::runcommand("find $path --max_depth=1 --fields=version,wp_path --format=json"));
+        $result = Utils::runcommand("find $path --max_depth=1 --fields=version,wp_path --format=json");
+        if (is_wpm_error($result)) return $result;
+        $instances = json_decode($result);
         foreach ($instances as $instance) {            
             ['basename' => $wp_name] = pathinfo($instance->wp_path);
             $instance->wp_name = $wp_name;
