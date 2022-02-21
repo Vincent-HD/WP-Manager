@@ -1,5 +1,10 @@
 <?php
-class WpInstance
+
+namespace WPM\Instance;
+
+use WPM\Utils\WPM_Utils as Utils;
+
+class WPM_Instance
 {
     private $db_name;
     private $db_user;
@@ -9,10 +14,10 @@ class WpInstance
 
     static public function parse_all_wp_instances($path)
     {
-        if (!WPUtils::is_wp_package_installed("wp-cli/find-command")) {
-            WPUtils::runcommand("package install wp-cli/find-command");
+        if (!Utils::is_wp_package_installed("wp-cli/find-command")) {
+            Utils::runcommand("package install wp-cli/find-command");
         }
-        $instances = json_decode(WPUtils::runcommand("find $path --max_depth=1 --fields=version,wp_path --format=json"));
+        $instances = json_decode(Utils::runcommand("find $path --max_depth=1 --fields=version,wp_path --format=json"));
         foreach ($instances as $instance) {            
             ['basename' => $wp_name] = pathinfo($instance->wp_path);
             $instance->wp_name = $wp_name;

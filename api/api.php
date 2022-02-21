@@ -3,6 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
+use WPM\Instance\WPM_Instance;
 
 $app = AppFactory::create();
 
@@ -15,7 +16,7 @@ $app->get('/getWordpressInstalled', function(Request $request, Response $respons
     global $lcache;
     $c_instances = $lcache->getItem('wp_instances');
     if (!$c_instances->isHit()) {
-        $instances = WpInstance::parse_all_wp_instances(ABSPATH . DIRECTORY_SEPARATOR . '../');
+        $instances = WPM_Instance::parse_all_wp_instances(ABSPATH . DIRECTORY_SEPARATOR . '../');
         $c_instances->set($instances);
         $c_instances->expiresAfter(30);
         $lcache->save($c_instances);
@@ -23,7 +24,7 @@ $app->get('/getWordpressInstalled', function(Request $request, Response $respons
         $instances = $c_instances->get();
     }
     $response->getBody()->write(json_encode($instances));
-    return $response->withHeader('Content-Type', 'application/json');
+    return json_response($response);
 });
 
 $app->run();

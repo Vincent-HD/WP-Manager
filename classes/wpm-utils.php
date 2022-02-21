@@ -1,5 +1,11 @@
 <?php
-class WPUtils {
+
+namespace WPM\Utils;
+
+use Exception;
+use Slim\Psr7\Response;
+
+class WPM_Utils {
 
     const START_CMD = 'php ' . ABSPATH . "\wp-cli.phar";
 
@@ -22,10 +28,22 @@ class WPUtils {
     }
 
     public static function runcommand($command) {
+        if (!file_exists(ABSPATH . DIRECTORY_SEPARATOR . 'wp-cli.phar')) {
+        }
         $result = exec(self::START_CMD . " $command", $output, $result_code);
         if ($result_code > 0) {
             throw new Exception('An error occured during command execution at: ' . __FILE__ . ':' . __LINE__, 1);
         }
         return $result ?? '';
+    }
+
+    /**
+     * Add JSON header to a response
+     *
+     * @param Response $response
+     * @return Response
+     */
+    public static function to_json_response(Response $response) {
+        return $response->withHeader('Content-Type', 'application/json');
     }
 }
