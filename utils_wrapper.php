@@ -10,7 +10,7 @@ use WPM\Utils\WPM_Utils;
  * @return Response
  */
 function json_response(Response $response) {
-    return WPM_Utils::to_json_response($response);
+    return WPM_Utils::json_response($response);
 }
 
 function is_wpm_error($error) {

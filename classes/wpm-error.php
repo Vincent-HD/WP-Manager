@@ -23,6 +23,7 @@ class WPM_Error {
                 'data'      => empty($this->data)? null : $this->data
             ]
         ]));
+        return $response;
     }
 
     static function is_wpm_error($error) {

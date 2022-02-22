@@ -8,7 +8,7 @@ use WPM_Error;
 
 class WPM_Utils {
 
-    const START_CMD = 'php ' . ABSPATH . "\wp-cli.phar";
+    const START_CMD = 'php ' . ABSPATH . DIRECTORY_SEPARATOR . "wp-cli.phar";
 
     public static function is_wp_package_installed($name) {
         $packages = self::get_wp_packages();
@@ -34,7 +34,7 @@ class WPM_Utils {
         }
         $result = exec(self::START_CMD . " $command", $output, $result_code);
         if ($result_code > 0) {
-            throw new Exception('An error occured during command execution at: ' . __FILE__ . ':' . __LINE__, 1);
+            return new WPM_Error('non_zero_code', 'Executed command returned a non zero code');
         }
         return $result ?? '';
     }
@@ -45,7 +45,7 @@ class WPM_Utils {
      * @param Response $response
      * @return Response
      */
-    public static function to_json_response(Response $response) {
+    public static function json_response(Response $response) {
         return $response->withHeader('Content-Type', 'application/json');
     }
 }

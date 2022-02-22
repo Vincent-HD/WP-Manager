@@ -14,9 +14,13 @@ $app->get('/', function(Request $request, Response $response) {
 
 $app->get('/getWordpressInstalled', function(Request $request, Response $response) {
     global $lcache;
+    $wp_installs_path = empty($_ENV['WP_INSTALLS_PATH'])? '../': $_ENV['WP_INSTALLS_PATH'];
     $c_instances = $lcache->getItem('wp_instances');
     if (!$c_instances->isHit()) {
-        $instances = WPM_Instance::parse_all_wp_instances(ABSPATH . DIRECTORY_SEPARATOR . '../');
+        $instances = WPM_Instance::parse_all_wp_instances(ABSPATH . DIRECTORY_SEPARATOR . $wp_installs_path);
+        if (is_wpm_error($instances)) {
+            return json_response($instances->to_api_err($response));
+        }
         $c_instances->set($instances);
         $c_instances->expiresAfter(30);
         $lcache->save($c_instances);
